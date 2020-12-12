@@ -116,10 +116,34 @@ class Teland:
         Cd = Cn*np.sin(alpha1) + Ca*np.cos(alpha1)
         return Cl, Cd
 
+    @classmethod
+    def ackeret_solution(cls):
+        slopeuf = np.tan((cls.theta_ul-cls.alpha)*np.pi/180)
+        slopeua = np.tan((-cls.alpha-cls.theta_ur)*np.pi/180)
+        slopelf = np.tan((-cls.alpha-cls.theta_ll)*np.pi/180)
+        slopela = np.tan((-cls.alpha+cls.theta_lr)*np.pi/180)
+     
+        cp2 = 2*slopeuf/np.sqrt(cls.M1**2 -1)
+        cp3 = 2*slopeua/np.sqrt(cls.M1**2 -1)
+        cp4 = -2*slopelf/np.sqrt(cls.M1**2 -1)
+        cp5 = -2*slopela/np.sqrt(cls.M1**2 -1)
+
+        cn = (cp4*(np.cos(cls.theta_ll*np.pi/180)) - cp2*(np.cos(cls.theta_ul*np.pi/180)))*cls.p + (cp5*(np.cos(cls.theta_lr*np.pi/180)) - cp3*(np.cos(cls.theta_ur*np.pi/180)))*(1-cls.p)
+        ca = (cp4*(np.sin(cls.theta_ll*np.pi/180)) + cp2*(np.sin(cls.theta_ul*np.pi/180)))*cls.p - (cp5*(np.sin(cls.theta_lr*np.pi/180)) + cp3*(np.sin(cls.theta_ur*np.pi/180)))*(1-cls.p)
+
+        alpha1= cls.alpha*np.pi/180
+            
+        Cl = cn*np.cos(alpha1)-ca*np.sin(alpha1)
+        Cd = cn*np.sin(alpha1)+ca*np.cos(alpha1)
+        return Cl, Cd
+
 def main():
 
     C_lift, C_drag = Teland.final_calc()
-    print("(i)Sectional lift coefficient: {} \n (ii) Sectional wave drag coefficient: {}".format(C_lift, C_drag))
+    print("(i)Sectional lift coefficient: {} \n (ii) Sectional wave drag coefficient: {}".format(C_lift[0], C_drag[0]))
+
+    C_lift, C_drag = Teland.ackeret_solution()
+    print("(i)Sectional lift coefficient by AT: {} \n (ii) Sectional wave drag coefficient by AT: {}".format(C_lift, C_drag))
 
 if __name__ == "__main__":
     main()
