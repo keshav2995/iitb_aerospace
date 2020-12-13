@@ -74,7 +74,7 @@ class Teland:
         return -self.mu2*np.pi/180 + (((self.gamma+1)/(self.gamma-1))**.5*(np.arctan(((self.gamma-1)/(self.gamma+1)*(b**2-1))**.5)) - np.arctan((b**2-1)**.5))
 
     def m3_value(self):
-        self.M3 = fsolve(self.pm_mach1, self.M2)
+        self.M3 = fsolve(self.pm_mach, self.M2)
 
     def p3_p2_cal(self):
         self.p3_p2 = ((1+.5*(self.gamma-1)*self.M2**2)/(1+.5*(self.gamma-1)*self.M3**2))**(self.gamma/(self.gamma-1))
@@ -89,11 +89,13 @@ class Teland:
     def beta_values2(self):
         self.B_l = fsolve(self.waveangle_l,0.00001)      #Value in radians  
         self.B3 = self.B_l*180/np.pi                   # Value in degrees
+        return self.B_l, self.B3
 
     def interim_calc(self):
-        self.Mn11 = self.M1*np.sin(self.B_l)
+        self.Beta_l, self.Beta_3 = self.beta_values2()
+        self.Mn11 = self.M1*np.sin(self.Beta_l)
         self.Mn4 = (((2/(self.gamma-1))+self.Mn11**2)/(2*self.gamma*self.Mn11**2/(self.gamma-1)-1))**.5
-        self.M4 = self.Mn4/np.sin((self.B3-self.theta_ll-self.alpha)*np.pi/180)
+        self.M4 = self.Mn4/np.sin((self.Beta_3-self.theta_ll-self.alpha)*np.pi/180)
         self.p4_p1 = 1+2*self.gamma/(self.gamma+1)*(self.Mn11**2-1)
         self.devtn2 = self.theta_ll+self.theta_lr
         self.mu4 = (((self.gamma+1)/(self.gamma-1))**.5*np.arctan(((self.gamma-1)/(self.gamma+1)*(self.M4**2-1))**.5)- np.arctan((self.M4**2-1)**.5))*180/np.pi
@@ -104,6 +106,16 @@ class Teland:
 
     def m5_value(self):
         self.M5 = fsolve(self.pm_mach1, self.M4)
+
+    def runall(self):
+        self.initial_variables()
+        self.beta_values()
+        self.mu2_value()
+        self.m3_value()
+        self.p3_p2_cal()
+        self.beta_values2()
+        self.interim_calc()
+        self.m5_value()
 
     def final_calc(self):
         self.p5_p4 = ((1+.5*(self.gamma-1)*self.M4**2)/(1+.5*(self.gamma-1)*self.M5**2))**(self.gamma/(self.gamma-1))
@@ -119,9 +131,12 @@ class Teland:
 
         self.Cl = self.Cn*np.cos(self.alpha1) - self.Ca*np.sin(self.alpha1)
         self.Cd = self.Cn*np.sin(self.alpha1) + self.Ca*np.cos(self.alpha1)
+        return self.Cl, self.Cd
+
 
     # Solution using Ackeret Theory
     def ackeret_solution(self):
+        self.initial_variables()
         self.slopeuf = np.tan((self.theta_ul-self.alpha)*np.pi/180)
         self.slopeua = np.tan((-self.alpha-self.theta_ur)*np.pi/180)
         self.slopelf = np.tan((-self.alpha-self.theta_ll)*np.pi/180)
@@ -139,6 +154,7 @@ class Teland:
             
         self.Cl = self.cn*np.cos(self.alpha1)-self.ca*np.sin(self.alpha1)
         self.Cd = self.cn*np.sin(self.alpha1)+self.ca*np.cos(self.alpha1)
+        return self.Cl, self.Cd
 
 
     def visualization(self):
@@ -200,10 +216,12 @@ class Teland:
 
 def main():
     t1 = Teland(0.00,0.07,0.5,2,3)
-    C_lift, C_drag = Teland.final_calc()
+    t1.runall()
+    C_lift, C_drag = t1.final_calc()
     print("(i)Sectional lift coefficient: {} \n (ii) Sectional wave drag coefficient: {}".format(C_lift[0], C_drag[0]))
 
-    C_lift_at, C_drag_at = Teland.ackeret_solution()
+    t2 = Teland(0.00,0.07,0.5,2,3)
+    C_lift_at, C_drag_at = t2.ackeret_solution()
     print("(i)Sectional lift coefficient by AT: {} \n (ii) Sectional wave drag coefficient by AT: {}".format(C_lift_at, C_drag_at))
 
     #Visualization
