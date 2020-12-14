@@ -23,29 +23,6 @@ class Teland:
         self.alpha = alpha     # the value of angle of attack'))
         self.M1 = M1     # the value of free stream Mach Number'))
 
-        # else:
-        #     self.m = np.linspace(-0.01,0.01,25)
-        #     self.t = np.linspace(0.03,0.06,5)
-        #     self.p = np.linspace(0.1,0.5,5)
-        #     self.alpha = np.linspace(0,5,5)
-        #     self.M1 = np.linspace(1,4,5)
-            # self.m = np.linspace(float(m[0]),float(m[1]),10)
-            # self.t = np.linspace(float(t[0]),float(t[1]),10)
-            # self.p = np.linspace(float(p[0]),float(p[1]),10)
-            # self.alpha = np.linspace(int(alpha[0]),int(alpha[1]),10)
-            # self.M1 = np.linspace(int(M1[0]),int(M1[1]),10)
-
-    # @classmethod
-    # def from_user_input(self):
-    #     return self(
-    #         input('Enter range of m separated by comma:: ').split(','), #-0.01,0.01
-    #         input('Enter range of t separated by comma: ').split(','), #0.03,0.06
-    #         input('Enter range of p separated by comma:: ').split(','), #0.1,0.5
-    #         input('Enter range of alpha separated by comma:: ').split(','), #0,5
-    #         input('Enter range of M separated by comma: ').split(','), #1,4
-    #         input('Enter "True" for plots:')
-    #     )
-
     def initial_variables(self):
         self.y_u = (self.t/2+self.m)
         self.y_l = -(self.t/2-self.m)
@@ -160,248 +137,248 @@ class Teland:
         self.Cd = self.cn*np.sin(self.alpha1)+self.ca*np.cos(self.alpha1)
         return self.Cl, self.Cd
 
-    @staticmethod
-    def visualization(df_t, df_p, df_alpha, df_M):
-        # Create traces
 
-        fig = make_subplots(rows=4, cols=2,
-                    subplot_titles=("Cl/Cd vs m (for M) [SE theory]", 
-                    "Cl/Cd vs m (for M) [Ackeret theory]", 
-                    "Cl/Cd vs m (for t) [SE theory]", 
-                    "Cl/Cd vs m (for t) [Ackeret theory]",
-                    "Cl/Cd vs m (for p) [SE theory]",
-                    "Cl/Cd vs m (for p) [Ackeret theory]",
-                    "Cl/Cd vs m (for alpha) [SE theory]",
-                    "Cl/Cd vs m (for alpha) [Ackeret theory]"
-                    ),
-                    specs=[[{"secondary_y": True}, {"secondary_y": True}],
-                           [{"secondary_y": True}, {"secondary_y": True}],
-                           [{"secondary_y": True}, {"secondary_y": True}],
-                           [{"secondary_y": True}, {"secondary_y": True}]])
+def visualization(df_t, df_p, df_alpha, df_M):
+    # Create traces
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,1],
-                            mode='lines',
-                            name=df_M.columns[1]),
-                            row=1, col=1, secondary_y=False,)
+    fig = make_subplots(rows=4, cols=2,
+                subplot_titles=("Cl/Cd vs m (for M) [SE theory]", 
+                "Cl/Cd vs m (for M) [Ackeret theory]", 
+                "Cl/Cd vs m (for t) [SE theory]", 
+                "Cl/Cd vs m (for t) [Ackeret theory]",
+                "Cl/Cd vs m (for p) [SE theory]",
+                "Cl/Cd vs m (for p) [Ackeret theory]",
+                "Cl/Cd vs m (for alpha) [SE theory]",
+                "Cl/Cd vs m (for alpha) [Ackeret theory]"
+                ),
+                specs=[[{"secondary_y": True}, {"secondary_y": True}],
+                        [{"secondary_y": True}, {"secondary_y": True}],
+                        [{"secondary_y": True}, {"secondary_y": True}],
+                        [{"secondary_y": True}, {"secondary_y": True}]])
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,3],
-                            mode='lines',
-                            name=df_M.columns[3]),
-                            row=1, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,1],
+                        mode='lines',
+                        name=df_M.columns[1]),
+                        row=1, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,5],
-                            mode='lines', 
-                            name=df_M.columns[5]),
-                            row=1, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,3],
+                        mode='lines',
+                        name=df_M.columns[3]),
+                        row=1, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,7],
-                            mode='lines', 
-                            name=df_M.columns[7]),
-                            row=1, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,5],
+                        mode='lines', 
+                        name=df_M.columns[5]),
+                        row=1, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,9],
-                            mode='lines', 
-                            name=df_M.columns[9]),
-                            row=1, col=1, secondary_y=False,)                         
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,7],
+                        mode='lines', 
+                        name=df_M.columns[7]),
+                        row=1, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,2],
-                            mode='lines',
-                            name=df_M.columns[2]),
-                            row=1, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,9],
+                        mode='lines', 
+                        name=df_M.columns[9]),
+                        row=1, col=1, secondary_y=False,)                         
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,4],
-                            mode='lines',
-                            name=df_M.columns[4]),
-                            row=1, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,2],
+                        mode='lines',
+                        name=df_M.columns[2]),
+                        row=1, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,6],
-                            mode='lines', 
-                            name=df_M.columns[6]),
-                            row=1, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,4],
+                        mode='lines',
+                        name=df_M.columns[4]),
+                        row=1, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,8],
-                            mode='lines', 
-                            name=df_M.columns[8]),
-                            row=1, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,6],
+                        mode='lines', 
+                        name=df_M.columns[6]),
+                        row=1, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,10],
-                            mode='lines', 
-                            name=df_M.columns[10]),
-                            row=1, col=2, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,8],
+                        mode='lines', 
+                        name=df_M.columns[8]),
+                        row=1, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,1],
-                            mode='lines',
-                            name=df_t.columns[1]),
-                            row=2, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_M.iloc[:,0], y=df_M.iloc[:,10],
+                        mode='lines', 
+                        name=df_M.columns[10]),
+                        row=1, col=2, secondary_y=False,)                        
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,3],
-                            mode='lines',
-                            name=df_t.columns[3]),
-                            row=2, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,1],
+                        mode='lines',
+                        name=df_t.columns[1]),
+                        row=2, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,5],
-                            mode='lines', 
-                            name=df_t.columns[5]),
-                            row=2, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,3],
+                        mode='lines',
+                        name=df_t.columns[3]),
+                        row=2, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,7],
-                            mode='lines', 
-                            name=df_t.columns[7]),
-                            row=2, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,5],
+                        mode='lines', 
+                        name=df_t.columns[5]),
+                        row=2, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,9],
-                            mode='lines', 
-                            name=df_t.columns[9]),
-                            row=2, col=1, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,7],
+                        mode='lines', 
+                        name=df_t.columns[7]),
+                        row=2, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,2],
-                            mode='lines',
-                            name=df_t.columns[2]),
-                            row=2, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,9],
+                        mode='lines', 
+                        name=df_t.columns[9]),
+                        row=2, col=1, secondary_y=False,)                        
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,4],
-                            mode='lines',
-                            name=df_t.columns[4]),
-                            row=2, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,2],
+                        mode='lines',
+                        name=df_t.columns[2]),
+                        row=2, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,6],
-                            mode='lines', 
-                            name=df_t.columns[6]),
-                            row=2, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,4],
+                        mode='lines',
+                        name=df_t.columns[4]),
+                        row=2, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,8],
-                            mode='lines', 
-                            name=df_t.columns[8]),
-                            row=2, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,6],
+                        mode='lines', 
+                        name=df_t.columns[6]),
+                        row=2, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,10],
-                            mode='lines', 
-                            name=df_t.columns[10]),
-                            row=2, col=2, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,8],
+                        mode='lines', 
+                        name=df_t.columns[8]),
+                        row=2, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,1],
-                            mode='lines',
-                            name=df_p.columns[1]),
-                            row=3, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_t.iloc[:,0], y=df_t.iloc[:,10],
+                        mode='lines', 
+                        name=df_t.columns[10]),
+                        row=2, col=2, secondary_y=False,)                        
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,3],
-                            mode='lines',
-                            name=df_p.columns[3]),
-                            row=3, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,1],
+                        mode='lines',
+                        name=df_p.columns[1]),
+                        row=3, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,5],
-                            mode='lines', 
-                            name=df_p.columns[5]),
-                            row=3, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,3],
+                        mode='lines',
+                        name=df_p.columns[3]),
+                        row=3, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,7],
-                            mode='lines', 
-                            name=df_p.columns[7]),
-                            row=3, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,5],
+                        mode='lines', 
+                        name=df_p.columns[5]),
+                        row=3, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,9],
-                            mode='lines', 
-                            name=df_p.columns[9]),
-                            row=3, col=1, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,7],
+                        mode='lines', 
+                        name=df_p.columns[7]),
+                        row=3, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,2],
-                            mode='lines',
-                            name=df_p.columns[2]),
-                            row=3, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,9],
+                        mode='lines', 
+                        name=df_p.columns[9]),
+                        row=3, col=1, secondary_y=False,)                        
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,4],
-                            mode='lines',
-                            name=df_p.columns[4]),
-                            row=3, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,2],
+                        mode='lines',
+                        name=df_p.columns[2]),
+                        row=3, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,6],
-                            mode='lines', 
-                            name=df_p.columns[6]),
-                            row=3, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,4],
+                        mode='lines',
+                        name=df_p.columns[4]),
+                        row=3, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,8],
-                            mode='lines', 
-                            name=df_p.columns[8]),
-                            row=3, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,6],
+                        mode='lines', 
+                        name=df_p.columns[6]),
+                        row=3, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,10],
-                            mode='lines', 
-                            name=df_p.columns[10]),
-                            row=3, col=2, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,8],
+                        mode='lines', 
+                        name=df_p.columns[8]),
+                        row=3, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,1],
-                            mode='lines',
-                            name=df_alpha.columns[1]),
-                            row=4, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_p.iloc[:,0], y=df_p.iloc[:,10],
+                        mode='lines', 
+                        name=df_p.columns[10]),
+                        row=3, col=2, secondary_y=False,)                        
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,3],
-                            mode='lines',
-                            name=df_alpha.columns[3]),
-                            row=4, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,1],
+                        mode='lines',
+                        name=df_alpha.columns[1]),
+                        row=4, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,5],
-                            mode='lines', 
-                            name=df_alpha.columns[5]),
-                            row=4, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,3],
+                        mode='lines',
+                        name=df_alpha.columns[3]),
+                        row=4, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,7],
-                            mode='lines', 
-                            name=df_alpha.columns[7]),
-                            row=4, col=1, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,5],
+                        mode='lines', 
+                        name=df_alpha.columns[5]),
+                        row=4, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,9],
-                            mode='lines', 
-                            name=df_alpha.columns[9]),
-                            row=4, col=1, secondary_y=False,)                         
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,7],
+                        mode='lines', 
+                        name=df_alpha.columns[7]),
+                        row=4, col=1, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,2],
-                            mode='lines',
-                            name=df_alpha.columns[2]),
-                            row=4, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,9],
+                        mode='lines', 
+                        name=df_alpha.columns[9]),
+                        row=4, col=1, secondary_y=False,)                         
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,4],
-                            mode='lines',
-                            name=df_alpha.columns[4]),
-                            row=4, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,2],
+                        mode='lines',
+                        name=df_alpha.columns[2]),
+                        row=4, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,6],
-                            mode='lines', 
-                            name=df_alpha.columns[6]),
-                            row=4, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,4],
+                        mode='lines',
+                        name=df_alpha.columns[4]),
+                        row=4, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,8],
-                            mode='lines', 
-                            name=df_alpha.columns[8]),
-                            row=4, col=2, secondary_y=False,)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,6],
+                        mode='lines', 
+                        name=df_alpha.columns[6]),
+                        row=4, col=2, secondary_y=False,)
 
-        fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,10],
-                            mode='lines', 
-                            name=df_alpha.columns[10]),
-                            row=4, col=2, secondary_y=False,)                        
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,8],
+                        mode='lines', 
+                        name=df_alpha.columns[8]),
+                        row=4, col=2, secondary_y=False,)
 
-        # Update xaxis properties
-        fig.update_xaxes(title_text="Values of m", row=1, col=1)
-        fig.update_xaxes(title_text="Values of m", row=1, col=2)
-        fig.update_xaxes(title_text="Values of m", row=2, col=1)
-        fig.update_xaxes(title_text="Values of m", row=2, col=2)
-        fig.update_xaxes(title_text="Values of m", row=3, col=1)
-        fig.update_xaxes(title_text="Values of m", row=3, col=2)
-        fig.update_xaxes(title_text="Values of m", row=4, col=1)
-        fig.update_xaxes(title_text="Values of m", row=4, col=2)
+    fig.add_trace(go.Scatter(x=df_alpha.iloc[:,0], y=df_alpha.iloc[:,10],
+                        mode='lines', 
+                        name=df_alpha.columns[10]),
+                        row=4, col=2, secondary_y=False,)                        
 
-        # Update yaxis properties
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=1, col=1)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=1, col=2)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=2, col=1)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=2, col=2)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=3, col=1)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=3, col=2)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=4, col=1)
-        fig.update_yaxes(title_text="Cl/Cd ratio", row=4, col=2)
+    # Update xaxis properties
+    fig.update_xaxes(title_text="Values of m", row=1, col=1)
+    fig.update_xaxes(title_text="Values of m", row=1, col=2)
+    fig.update_xaxes(title_text="Values of m", row=2, col=1)
+    fig.update_xaxes(title_text="Values of m", row=2, col=2)
+    fig.update_xaxes(title_text="Values of m", row=3, col=1)
+    fig.update_xaxes(title_text="Values of m", row=3, col=2)
+    fig.update_xaxes(title_text="Values of m", row=4, col=1)
+    fig.update_xaxes(title_text="Values of m", row=4, col=2)
 
-        fig.layout.update(height=1080, width=1280, showlegend=False, hovermode='closest')
+    # Update yaxis properties
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=1, col=1)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=1, col=2)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=2, col=1)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=2, col=2)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=3, col=1)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=3, col=2)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=4, col=1)
+    fig.update_yaxes(title_text="Cl/Cd ratio", row=4, col=2)
 
-        fig.show()
+    fig.layout.update(height=1080, width=1280, showlegend=False, hovermode='closest')
+
+    fig.show()
 
 
 
@@ -467,7 +444,7 @@ def main():
             df_alpha = get_plot_data(np.linspace(-0.01,0.01,25), 0.07, 0.5, np.linspace(0,5,5), 3)
 
 
-    Teland.visualization(df_t, df_p, df_alpha, df_M)
+    visualization(df_t, df_p, df_alpha, df_M)
 
 if __name__ == "__main__":
     i_v = 1
