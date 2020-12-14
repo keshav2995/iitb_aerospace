@@ -12,6 +12,9 @@ from plotly.subplots import make_subplots
     semi-wedge angles.
 '''
 
+import warnings
+warnings.filterwarnings('ignore')
+
 class Teland:
 
     gamma = 1.4   # value of adiabitc index of gas'))
@@ -438,12 +441,12 @@ def main():
     def part_c(*args):
         df_y = pd.DataFrame()
         arg = args
-        df_y['p value'] = np.linspace(0.1,0.9,25)
+        df_y['p value'] = np.linspace(0.2,0.9,25)
         i_=0
         while i_<4:
             for x in arg[i_]:
                 Cd_value = []
-                for y in np.linspace(0.1,0.9,25): #---> p
+                for y in np.linspace(0.2,0.9,25): #---> p
                     if i_ ==0: 
                         t = Teland(m = x, t = 0.07, p = y, alpha = 2, M1 = 3) 
                     elif i_==1:
@@ -491,7 +494,11 @@ def main():
                             name=df_cd.columns[i+3]))
         fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i+4],
                             mode='lines', 
-                            name=df_cd.columns[i+4]))                                                      
+                            name=df_cd.columns[i+4]))     
+        # Update xaxis properties
+        fig.update_xaxes(title_text="Values of p")
+        # Update yaxis properties
+        fig.update_yaxes(title_text="Value of Cd")
         fig.show()
 
 
