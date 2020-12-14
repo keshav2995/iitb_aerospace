@@ -392,7 +392,7 @@ def main():
     C_lift_at, C_drag_at = t2.ackeret_solution()
     print("(i)Sectional lift coefficient by AT: {} \n (ii) Sectional wave drag coefficient by AT: {}".format(C_lift_at, C_drag_at))
 
-    seq = [1,2,3,4]
+    seq = [1,2,3,4,5]
     names = ['t','p','alpha','M']
     #for cl/cd vs m (given val)
     def get_plot_data(*args):  #m, t, p, alpha, M1
@@ -433,6 +433,34 @@ def main():
 
         return df_x
 
+
+    names_new = ['m','t','alpha','M']
+    def part_c(*args):
+        df_y = pd.DataFrame()
+        arg = args
+        df_y['p value'] = np.linspace(0.1,0.9,25)
+        i_=0
+        while i_<4:
+            for x in arg[i_]:
+                Cd_value = []
+                for y in np.linspace(0.1,0.9,25): #---> p
+                    if i_ ==0: 
+                        t = Teland(m = x, t = 0.07, p = y, alpha = 2, M1 = 3) 
+                    elif i_==1:
+                        t = Teland(m = 0.00, t = x, p = y, alpha = 2, M1 = 3)
+                    elif i_==2:
+                        t = Teland(m = 0.00, t = 0.07, p = y, alpha = x, M1 = 3)
+                    elif i_ ==3:
+                        t = Teland(m = 0.00, t = 0.07, p = y, alpha = 2, M1 = x)
+                    t.runall()
+                    C_l, C_d = t.final_calc()
+                    Cd_value.append(C_d[0])
+                    
+                df_y['Cd for {}={} (set)'.format(names_new[i_],x)] = Cd_value
+            i_ += 1
+        return df_y
+
+
     for i in seq:
         if i==4:
             df_M = get_plot_data(np.linspace(-0.01,0.01,25), 0.07, 0.5, 2, np.linspace(2,5,5))
@@ -442,9 +470,30 @@ def main():
             df_p = get_plot_data(np.linspace(-0.01,0.01,25), 0.07, np.linspace(0.1,0.5,5), 2, 3)
         elif i==3:
             df_alpha = get_plot_data(np.linspace(-0.01,0.01,25), 0.07, 0.5, np.linspace(0,5,5), 3)
-
+        elif i==5:
+            df_cd = part_c(np.linspace(0.01,0.05,5), np.linspace(0.03,0.05,5), np.linspace(0.5,2.5,5), np.linspace(1.5,3.5,5)) #only passing m,t,alpha,M
 
     visualization(df_t, df_p, df_alpha, df_M)
+
+    for i in range(1,len(df_cd.columns),5):
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i],
+                            mode='lines',
+                            name=df_cd.columns[i]))
+        fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i+1],
+                            mode='lines',
+                            name=df_cd.columns[i+1]))
+        fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i+2],
+                            mode='lines', 
+                            name=df_cd.columns[i+2]))
+        fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i+3],
+                            mode='lines', 
+                            name=df_cd.columns[i+3]))
+        fig.add_trace(go.Scatter(x=df_cd.iloc[:,0], y=df_cd.iloc[:,i+4],
+                            mode='lines', 
+                            name=df_cd.columns[i+4]))                                                      
+        fig.show()
+
 
 if __name__ == "__main__":
     i_v = 1
